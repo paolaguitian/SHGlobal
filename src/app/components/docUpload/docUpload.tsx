@@ -17,7 +17,6 @@ type Props = {
 /**
  * TODO:
  * update styles on entry button
- * add location chunks
  * perfect styles
  * add API call for dummy dropdown values
  * check on D&D logic, check errors
@@ -85,6 +84,14 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
         </Form.Item>
     )
 
+    //placeholder f(x) for whatever logic PO asks
+    const getChecking = (label: string, status: string) => (
+        <div className='docUp-form-checks'>
+            <div className='docUp-form-checks-label'>{label}</div>
+            <div className='docUp-form-checks-status'>{status}</div>
+        </div>
+    )
+
     const renderForm = () => (
         <Form
             initialValues={{}}
@@ -105,6 +112,7 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
                 <Form.Item label="Select a manifest you'd like to import" valuePropName="fileList" name='docBlob'>
                     {renderDragandDrop()}
                 </Form.Item>
+                {getChecking('Elapse Data Checking', 'No Elapsed Dates!')}
                 <Form.Item label='Tolerance Window' colon name='isToggle'>
                     <div className='docUp-form-row'>
                         <Switch onChange={(checked) => checked ? setisOnOff('ON') : setisOnOff('OFF')} />
@@ -122,6 +130,7 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
                         <Radio value="1"> No </Radio>
                     </Radio.Group>
                 </Form.Item>
+                {getChecking('Location Checking', 'All Available!')}
                 <Form.Item label="Client" name='client'>
                     <Radio.Group>
                         <Radio value="0"> Single </Radio>

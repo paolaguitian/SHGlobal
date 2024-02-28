@@ -44,6 +44,25 @@
     margin: 0 1rem;
 }
 
+.docUp-form-checks {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+    padding: 1rem 0;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+}
+
+.docUp-form-checks-label {
+    font-weight: bold;
+    color: #013B71;
+}
+
+.docUp-form-checks-status {
+    font-weight: bold;
+    color: green;
+}
+
 .docUp-modal-footer {
     display: flex;
     flex-direction: column;
