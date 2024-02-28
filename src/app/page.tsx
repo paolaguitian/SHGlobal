@@ -9,7 +9,7 @@ import { DocUpload } from "./components/docUpload/docUpload";
 export default function Home() {
   const [showModal, setShowModal] = useState(false)
 
-  const renderDocUpload = () => <DocUpload visible={showModal} />
+  const renderDocUpload = () => <DocUpload visible={showModal} closeModal={() => setShowModal(false)} />
   return (
     <main className={styles.main}>
       <div className={styles.center}>
