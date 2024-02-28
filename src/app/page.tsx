@@ -1,16 +1,17 @@
+'use client'
+
 import Image from "next/image";
 import styles from "./page.module.css";
+import React, { useState } from "react";
+import { Button } from "antd";
+import { DocUpload } from "./components/docUpload/docUpload";
 
 export default function Home() {
+  const [showModal, setShowModal] = useState(false)
+
+  const renderDocUpload = () => <DocUpload visible={showModal} />
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-      </div>
-
       <div className={styles.center}>
         <Image
           className={styles.logo}
@@ -21,6 +22,13 @@ export default function Home() {
           priority
         />
       </div>
+      <Button
+        onClick={() => (setShowModal(true))}
+        type='text'
+      >
+        Upload a Document
+      </Button>
+      {showModal && renderDocUpload()}
     </main>
   );
 }
