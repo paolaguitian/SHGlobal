@@ -16,8 +16,6 @@ type Props = {
 
 /**
  * TODO:
- * update styles on entry button
- * perfect styles
  * add API call for dummy dropdown values
  * check on D&D logic, check errors
  */
@@ -152,6 +150,7 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
                 open={props.visible}
                 footer={null}
                 width={1000}
+                onCancel={props.closeModal}
             >
                 <div className='docUp-modal'>
                     <div className='docUp-modal-header'>
@@ -169,12 +168,18 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
                         <div className='docUp-modal-submit-buttons'>
                             <Button
                                 type="primary"
-                                style={{ backgroundColor: '#013B71', width: '' }}
+                                className='docUp-modal-submit-button'
                                 onClick={() => formRef?.current?.submit()}
                             >
                                 Continue Import
                             </Button>
-                            <Button onClick={props.closeModal}>Cancel</Button>
+                            <Button
+                                className='docUp-modal-cancel-button'
+                                onClick={props.closeModal}
+                            >
+
+                                Cancel
+                            </Button>
                         </div>
                     </div>
                 </div>
