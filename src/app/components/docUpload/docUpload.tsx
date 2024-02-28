@@ -16,7 +16,6 @@ type Props = {
 
 /**
  * TODO:
- * add onSubmit logic
  * update styles on entry button
  * add location chunks
  * perfect styles
@@ -92,6 +91,7 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
             layout='vertical'
             className='docUp-modal-body'
             onFinish={submitDoc}
+            ref={formRef}
         >
             <div className='docUp-form-col'>
                 <Form.Item name='demoName'>
@@ -161,6 +161,7 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
                             <Button
                                 type="primary"
                                 style={{ backgroundColor: '#013B71', width: '' }}
+                                onClick={() => formRef?.current?.submit()}
                             >
                                 Continue Import
                             </Button>
