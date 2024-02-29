@@ -17,7 +17,7 @@ type Props = {
 /**
  * TODO:
  * add API call for dummy dropdown values
- * check on D&D logic, check errors
+ * expand on file list, check on base64
  */
 export const DocUpload: React.FC<Props> = (props: Props) => {
     const [isOnOff, setisOnOff] = useState('OFF');
@@ -28,30 +28,15 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
         console.table(values)
     }
 
-    //TODO: look into a working logic. basic imp
-    const renderDragandDrop = () => {
-        const props: UploadProps = {
-            name: 'file',
-            multiple: true,
-            action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
-            onChange(info) {
-                const { status } = info.file;
-                if (status !== 'uploading') {
-                    console.log(info.file, info.fileList);
-                }
-                if (status === 'done') {
-                    message.success(`${info.file.name} file uploaded successfully.`);
-                } else if (status === 'error') {
-                    message.error(`${info.file.name} file upload failed.`);
-                }
-            },
-            onDrop(e) {
-                console.log('Dropped files', e.dataTransfer.files);
-            },
-        };
+    //returns all file uploaded to form value
+    const getFileList = (e: any) => {
+        if (Array.isArray(e)) return e
+        return e?.fileList
+    }
 
+    const renderDragandDrop = () => {
         return (
-            <Dragger {...props}>
+            <Dragger>
                 <p className="ant-upload-drag-icon">
                     <InboxOutlined />
                 </p>
@@ -107,11 +92,11 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
                         {/* todo: fetch dummy data for showacase */}
                     </Select>
                 </Form.Item>
-                <Form.Item label="Select a manifest you'd like to import" valuePropName="fileList" name='docBlob'>
+                <Form.Item label="Select a manifest you'd like to import" valuePropName="fileList" getValueFromEvent={getFileList} name='docBlob'>
                     {renderDragandDrop()}
                 </Form.Item>
                 {getChecking('Elapse Data Checking', 'No Elapsed Dates!')}
-                <Form.Item label='Tolerance Window' colon name='isToggle'>
+                <Form.Item label='Tolerance Window' name='toleranceWindow' valuePropName='checked'>
                     <div className='docUp-form-row'>
                         <Switch onChange={(checked) => checked ? setisOnOff('ON') : setisOnOff('OFF')} />
                         <div>{`Toggle ${isOnOff}`}</div>
