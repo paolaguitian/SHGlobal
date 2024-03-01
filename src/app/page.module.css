@@ -7,6 +7,11 @@
   background-color: #013B71;
 }
 
+.mainButton {
+  background-color: transparent;
+  color: white;
+}
+
 .description {
   display: inherit;
   justify-content: inherit;
@@ -200,8 +205,9 @@
   }
 }
 
+
 /* Tablet and Smaller Desktop */
-@media (min-width: 701px) and (max-width: 1120px) {
+@media (min-width: 70s1px) and (max-width: 1120px) {
   .grid {
     grid-template-columns: repeat(2, 50%);
   }

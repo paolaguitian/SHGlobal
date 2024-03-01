@@ -1,26 +1,35 @@
+'use client'
+
 import Image from "next/image";
 import styles from "./page.module.css";
+import React, { useState } from "react";
+import { Button } from "antd";
+import { DocUpload } from "./components/docUpload/docUpload";
+import Logo from './shg-horiz.png';
 
 export default function Home() {
+  const [showModal, setShowModal] = useState(false)
+
+  const renderDocUpload = () => <DocUpload visible={showModal} closeModal={() => setShowModal(false)} />
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-      </div>
-
       <div className={styles.center}>
         <Image
           className={styles.logo}
-          src="/sh-logo.png"
+          src={Logo}
           alt="Sky Hop Logo"
-          width={300}
-          height={40}
+          width={400}
+          height={60}
           priority
         />
       </div>
+      <Button
+        onClick={() => (setShowModal(true))}
+        className={styles.mainButton}
+      >
+        Upload a Document
+      </Button>
+      {showModal && renderDocUpload()}
     </main>
   );
 }
