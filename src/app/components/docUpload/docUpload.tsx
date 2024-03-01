@@ -1,6 +1,5 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { Modal, Form, Select, Upload, Switch, Radio, Button } from 'antd'
-import type { UploadProps, message } from 'antd';
 
 import InboxOutlined from '@ant-design/icons/InboxOutlined'
 import ClockCircleOutlined from '@ant-design/icons/ClockCircleOutlined'
@@ -14,14 +13,26 @@ type Props = {
     closeModal: () => void
 }
 
-/**
- * TODO:
- * add API call for dummy dropdown values
- * expand on file list, check on base64
- */
+type Pokemon = {
+    name: string,
+    url: string
+}
+
 export const DocUpload: React.FC<Props> = (props: Props) => {
     const [isOnOff, setisOnOff] = useState('OFF');
     const formRef = useRef(null)
+    const [options, setOptions] = useState([]);
+
+    const getDummyData = useCallback(async () => {
+        const response = await fetch('https://pokeapi.co/api/v2/berry/');
+        const data = await response.json()
+        const options = data?.results?.map((item: Pokemon) => ({ value: item?.name, label: item?.name }));
+        setOptions(options)
+    }, [])
+
+    useEffect(() => {
+        getDummyData()
+    }, [getDummyData])
 
     const submitDoc = (values: any) => {
         //send data to BE
@@ -50,20 +61,12 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
     }
 
     const getTestingCenter = (name: string, label: string) => (
-        <Form.Item name={name}>
-            <div className='docUp-form-row'>
-                <div>{label}</div>
-                <Select placeholder='Client Name' style={{ width: '190px', height: '50px' }}>
-                    <Select.Option
-                        value={'getCode'}
-                    >
-                        Demo
-                    </Select.Option>
-                    <ClockCircleOutlined />
-
-                    {/* todo: fetch dummy data for showacase */}
-                </Select>
-            </div>
+        <Form.Item name={name} label={label}>
+            <Select
+                placeholder='Client Name'
+                options={options}
+                style={{ width: '190px', height: '50px' }}
+            />
         </Form.Item>
     )
 
@@ -77,7 +80,6 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
 
     const renderForm = () => (
         <Form
-            initialValues={{}}
             layout='vertical'
             className='docUp-modal-body'
             onFinish={submitDoc}
@@ -85,26 +87,22 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
         >
             <div className='docUp-form-col'>
                 <Form.Item name='demoName'>
-                    <Select placeholder='Select Import Name:'>
-                        <Select.Option value="importName">
-                            Demo
-                        </Select.Option>
-                        {/* todo: fetch dummy data for showacase */}
-                    </Select>
+                    <Select placeholder='Select Import Name:' options={options} />
                 </Form.Item>
                 <Form.Item label="Select a manifest you'd like to import" valuePropName="fileList" getValueFromEvent={getFileList} name='docBlob'>
                     {renderDragandDrop()}
                 </Form.Item>
                 {getChecking('Elapse Data Checking', 'No Elapsed Dates!')}
-                <Form.Item label='Tolerance Window' name='toleranceWindow' valuePropName='checked'>
-                    <div className='docUp-form-row'>
-                        <Switch onChange={(checked) => checked ? setisOnOff('ON') : setisOnOff('OFF')} />
-                        <div>{`Toggle ${isOnOff}`}</div>
-                        <div className='docUp-form-divider' />
-                        <ClockCircleOutlined />
-                        <div>Select Tolerance Level</div>
-                    </div>
+                <Form.Item label='Tolerance Window' name='toleranceWindow' valuePropName="checked">
+                    <Switch onChange={(checked) => checked ? setisOnOff('ON') : setisOnOff('OFF')} />
                 </Form.Item>
+                <div className='docUp-form-row'>
+                    <div>{`Toggle ${isOnOff}`}</div>
+                    <div className='docUp-form-divider' />
+                    <div>Select Tolerance Level</div>
+                    <ClockCircleOutlined />
+                </div>
+
             </div>
             <div className='docUp-form-col'>
                 <Form.Item label="Split schedule using social distancing?" name='scheduleSplit'>
