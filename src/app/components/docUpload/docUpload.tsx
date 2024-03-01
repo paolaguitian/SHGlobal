@@ -1,12 +1,11 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
-import { Modal, Form, Select, Upload, Switch, Radio, Button } from 'antd'
+import { Modal, Form, Select, Upload, Switch, Radio, Button, notification } from 'antd'
 
 import InboxOutlined from '@ant-design/icons/InboxOutlined'
 import ClockCircleOutlined from '@ant-design/icons/ClockCircleOutlined'
 import './styles.css'
 
 const { Dragger } = Upload;
-
 
 type Props = {
     visible: boolean
@@ -34,9 +33,18 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
         getDummyData()
     }, [getDummyData])
 
-    const submitDoc = (values: any) => {
-        //send data to BE
+    const submitDoc = async (values: any) => {
         console.table(values)
+        const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: JSON.stringify(values),
+        });
+
+        const submitStatus = await response.json().catch(err => {
+            console.error(err)
+        });
+
+        console.log(submitStatus, "client sub");
     }
 
     //returns all file uploaded to form value
@@ -102,7 +110,6 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
                     <div>Select Tolerance Level</div>
                     <ClockCircleOutlined />
                 </div>
-
             </div>
             <div className='docUp-form-col'>
                 <Form.Item label="Split schedule using social distancing?" name='scheduleSplit'>
@@ -160,7 +167,6 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
                                 className='docUp-modal-cancel-button'
                                 onClick={props.closeModal}
                             >
-
                                 Cancel
                             </Button>
                         </div>
