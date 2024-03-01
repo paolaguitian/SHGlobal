@@ -1,12 +1,11 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
-import { Modal, Form, Select, Upload, Switch, Radio, Button } from 'antd'
+import { Modal, Form, Select, Upload, Switch, Radio, Button, Alert } from 'antd'
 
 import InboxOutlined from '@ant-design/icons/InboxOutlined'
 import ClockCircleOutlined from '@ant-design/icons/ClockCircleOutlined'
 import './styles.css'
 
 const { Dragger } = Upload;
-
 
 type Props = {
     visible: boolean
@@ -22,21 +21,37 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
     const [isOnOff, setisOnOff] = useState('OFF');
     const formRef = useRef(null)
     const [options, setOptions] = useState([]);
+    const [notificationStatus, setNotificationStatus] = useState('');
 
     const getDummyData = useCallback(async () => {
-        const response = await fetch('https://pokeapi.co/api/v2/berry/');
-        const data = await response.json()
-        const options = data?.results?.map((item: Pokemon) => ({ value: item?.name, label: item?.name }));
-        setOptions(options)
+        try {
+            const response = await fetch('https://pokeapi.co/api/v2/berry/');
+            const data = await response.json()
+            const options = data?.results?.map((item: Pokemon) => ({ value: item?.name, label: item?.name }));
+            setOptions(options)
+        } catch (error) {
+            console.error('fetching options', error)
+        }
     }, [])
 
     useEffect(() => {
         getDummyData()
     }, [getDummyData])
 
-    const submitDoc = (values: any) => {
-        //send data to BE
+    const submitDoc = async (values: any) => {
         console.table(values)
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: JSON.stringify(values),
+            });
+            const submitStatus = await response.json()
+            setNotificationStatus('success')
+        } catch (error) {
+            console.error('submitting doc', error)
+            setNotificationStatus('error')
+
+        }
     }
 
     //returns all file uploaded to form value
@@ -78,6 +93,17 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
         </div>
     )
 
+    const renderNotificationStatus = () => {
+        switch (notificationStatus) {
+            case 'success':
+                return <Alert message="Your document has been uploaded" type="success" />
+            case 'error':
+                return <Alert message="Could not upload document. Try again later" type="error" />
+            default:
+                return null
+        }
+    }
+
     const renderForm = () => (
         <Form
             layout='vertical'
@@ -102,7 +128,6 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
                     <div>Select Tolerance Level</div>
                     <ClockCircleOutlined />
                 </div>
-
             </div>
             <div className='docUp-form-col'>
                 <Form.Item label="Split schedule using social distancing?" name='scheduleSplit'>
@@ -141,6 +166,7 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
                             Document Upload
                         </div>
                     </div>
+                    {renderNotificationStatus()}
                     <div>
                         {renderForm()}
                     </div>
@@ -160,7 +186,6 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
                                 className='docUp-modal-cancel-button'
                                 onClick={props.closeModal}
                             >
-
                                 Cancel
                             </Button>
                         </div>
