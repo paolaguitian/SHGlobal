@@ -22,6 +22,7 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
     const formRef = useRef<any>()
     const [options, setOptions] = useState([]);
     const [notificationStatus, setNotificationStatus] = useState('');
+    const [isLoading, setIsLoading] = useState(false)
 
     const getDummyData = useCallback(async () => {
         try {
@@ -40,15 +41,18 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
 
     const submitDoc = async (values: any) => {
         console.table(values)
+        setIsLoading(true)
         try {
             const response = await fetch('/api/upload', {
                 method: 'POST',
                 body: JSON.stringify(values),
             });
             const submitStatus = await response.json()
+            setIsLoading(false)
             setNotificationStatus('success')
         } catch (error) {
             console.error('submitting doc', error)
+            setIsLoading(false)
             setNotificationStatus('error')
 
         }
@@ -178,6 +182,7 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
                             <Button
                                 type="primary"
                                 className='docUp-modal-submit-button'
+                                loading={isLoading}
                                 onClick={() => formRef?.current?.submit()}
                             >
                                 Continue Import
