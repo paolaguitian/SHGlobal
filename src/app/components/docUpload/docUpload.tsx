@@ -62,7 +62,7 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
 
     const renderDragandDrop = () => {
         return (
-            <Dragger>
+            <Dragger beforeUpload={() => false}>
                 <p className="ant-upload-drag-icon">
                     <InboxOutlined />
                 </p>
