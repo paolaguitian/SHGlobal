@@ -19,7 +19,7 @@ type Pokemon = {
 
 export const DocUpload: React.FC<Props> = (props: Props) => {
     const [isOnOff, setisOnOff] = useState('OFF');
-    const formRef = useRef(null)
+    const formRef = useRef<any>()
     const [options, setOptions] = useState([]);
     const [notificationStatus, setNotificationStatus] = useState('');
 
