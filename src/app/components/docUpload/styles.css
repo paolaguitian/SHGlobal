@@ -43,6 +43,13 @@
     flex-direction: row;
 }
 
+.docUp-form-item-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .docUp-form-divider {
     border-right: 2px solid #013B71;
     margin: 0 1rem;

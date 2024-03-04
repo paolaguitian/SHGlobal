@@ -80,13 +80,16 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
     }
 
     const getTestingCenter = (name: string, label: string) => (
-        <Form.Item name={name} label={label}>
-            <Select
-                placeholder='Client Name'
-                options={options}
-                style={{ width: '190px', height: '50px' }}
-            />
-        </Form.Item>
+        <div className='docUp-form-item-row'>
+            <div className=''>{label}</div>
+            <Form.Item name={name}>
+                <Select
+                    placeholder='Client Name'
+                    options={options}
+                    style={{ width: '190px', height: '50px' }}
+                />
+            </Form.Item>
+        </div>
     )
 
     //placeholder f(x) for whatever logic PO asks
@@ -123,14 +126,16 @@ export const DocUpload: React.FC<Props> = (props: Props) => {
                     {renderDragandDrop()}
                 </Form.Item>
                 {getChecking('Elapse Data Checking', 'No Elapsed Dates!')}
-                <Form.Item label='Tolerance Window' name='toleranceWindow' valuePropName="checked">
-                    <Switch onChange={(checked) => checked ? setisOnOff('ON') : setisOnOff('OFF')} />
-                </Form.Item>
-                <div className='docUp-form-row'>
-                    <div>{`Toggle ${isOnOff}`}</div>
-                    <div className='docUp-form-divider' />
-                    <div>Select Tolerance Level</div>
-                    <ClockCircleOutlined />
+                <div className='docUp-form-item-row'>
+                    <Form.Item label='Tolerance Window' name='toleranceWindow' valuePropName="checked">
+                        <Switch onChange={(checked) => checked ? setisOnOff('ON') : setisOnOff('OFF')} />
+                    </Form.Item>
+                    <div className='docUp-form-row'>
+                        <div>{`Toggle ${isOnOff}`}</div>
+                        <div className='docUp-form-divider' />
+                        <div>Select Tolerance Level</div>
+                        <ClockCircleOutlined />
+                    </div>
                 </div>
             </div>
             <div className='docUp-form-col'>
